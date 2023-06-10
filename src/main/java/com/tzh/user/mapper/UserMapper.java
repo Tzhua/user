@@ -18,4 +18,6 @@ public interface UserMapper {
      * @return      更新条数
      */
     int insertUser(User user);
+
+    User selectUser(int id);
 }

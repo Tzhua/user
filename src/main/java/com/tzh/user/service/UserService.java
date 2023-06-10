@@ -13,4 +13,6 @@ import com.tzh.user.entity.User;
 public interface UserService {
 
     int insertUser(User user);
+
+    User selectUser(int id);
 }
