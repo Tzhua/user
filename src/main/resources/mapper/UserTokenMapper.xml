@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tzh.user.mapper.UserTokenMapper">
+
+
+    <insert id="insertTokenInfo">
+        insert into user_token (account_id, start_time, end_time, token)
+        values (#{accountId},#{startTime},#{endTime},#{token})
+    </insert>
+    <select id="queryTokenByAccountIdAndTime" resultType="com.tzh.user.entity.UserToken">
+        select * from user_token where account_id=#{accountId} and NOW() between start_time and end_time;
+    </select>
+
+
+</mapper>

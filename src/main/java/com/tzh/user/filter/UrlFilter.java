@@ -3,7 +3,10 @@ package com.tzh.user.filter;
 import com.alibaba.fastjson.JSONObject;
 import com.tzh.user.JwtUtils;
 import com.tzh.user.entity.Result;
+import com.tzh.user.entity.UserToken;
+import com.tzh.user.service.UserTokenService;
 import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -23,6 +26,9 @@ import java.io.IOException;
 @WebFilter(urlPatterns = "/*")
 @Component
 public class UrlFilter implements Filter {
+
+    @Autowired
+    private UserTokenService userTokenService;
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
@@ -47,6 +53,14 @@ public class UrlFilter implements Filter {
         //解析token是否存在
         try {
             Claims claims = JwtUtils.parseJwt(token);
+            Integer accountId = Integer.valueOf(claims.get("accountId").toString());
+            UserToken userToken = userTokenService.queryTokenByAccountIdAndTime(accountId);
+            if (userToken == null){
+                Result error = new Result().fail("未登录",400);
+                String noLogin = JSONObject.toJSONString(error);
+                httpServletResponse.getWriter().write(noLogin);
+                return;
+            }
             System.out.println(claims);
         }catch (Exception e){
             e.printStackTrace();

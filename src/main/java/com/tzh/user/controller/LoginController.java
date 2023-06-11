@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.tzh.user.JwtUtils;
 import com.tzh.user.entity.Result;
 import com.tzh.user.entity.User;
+import com.tzh.user.entity.UserToken;
 import com.tzh.user.service.UserService;
+import com.tzh.user.service.UserTokenService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserTokenService userTokenService;
+
     @PostMapping
     public Result login(@RequestBody User user, HttpServletResponse response) {
         JSONObject jsonpObject=new JSONObject();
@@ -39,17 +44,34 @@ public class LoginController {
         if (!checkUser){
             return new Result().fail("请检查账号或密码输入是否有误",400);
         }
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
+        UserToken userToken = userTokenService.queryTokenByAccountIdAndTime(user.getAccountId());
+        if (userToken != null){
+            String token = userToken.getToken();
+            // 登录成功后，返回token到header里面
+            response.addHeader("Authorization", "Bearer " + token);
+            jsonpObject.put("access_token", token);
+            jsonpObject.put("accountId", user.getAccountId());
+            jsonpObject.put("expiration", userToken.getEndTime());
+        } else {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
+            UserToken newUserToken = new UserToken();
+            String subject = String.valueOf(user.getAccountId());
+            Map<String,Object> userInfo = new HashMap<>();
+            userInfo.put("accountId",subject);
+            String token = JwtUtils.generateJwt(userInfo);
+            // 登录成功后，返回token到header里面
+            response.addHeader("Authorization", "Bearer " + token);
+            jsonpObject.put("access_token", token);
+            jsonpObject.put("accountId", user.getAccountId());
+            jsonpObject.put("expiration", dateFormat.format(new Date(System.currentTimeMillis() +  60 * 60 * 1000)));
+            newUserToken.setToken(token);
+            newUserToken.setAccountId(user.getAccountId());
+            newUserToken.setStartTime(new Date());
+            newUserToken.setEndTime(new Date(System.currentTimeMillis() +  60 * 60 * 1000));
+            userTokenService.insertTokenInfo(newUserToken);
 
-        String subject = String.valueOf(user.getAccountId());
-        Map<String,Object> userInfo = new HashMap<>();
-        userInfo.put("accountId",subject);
-        String token = JwtUtils.generateJwt(userInfo);
-        // 登录成功后，返回token到header里面
-        response.addHeader("Authorization", "Bearer " + token);
-        jsonpObject.put("access_token", token);
-        jsonpObject.put("accountId", user.getAccountId());
-        jsonpObject.put("expiration", dateFormat.format(new Date(System.currentTimeMillis() +  60 * 60 * 1000)));
+        }
+
         return new Result().success(jsonpObject);
 
     }
