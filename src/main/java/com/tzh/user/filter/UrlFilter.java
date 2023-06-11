@@ -61,7 +61,6 @@ public class UrlFilter implements Filter {
                 httpServletResponse.getWriter().write(noLogin);
                 return;
             }
-            System.out.println(claims);
         }catch (Exception e){
             e.printStackTrace();
             Result noLogin = new Result().fail("未登录",400);
