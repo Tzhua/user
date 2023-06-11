@@ -26,7 +26,7 @@ public class UserController {
     public Result insertUser(@RequestBody User user){
         int i = userService.insertUser(user);
         if (i > 0){
-            return new Result().success();
+            return new Result().success(i);
         }
         return new Result().fail("","创建用户失败");
     }
@@ -77,7 +77,7 @@ public class UserController {
     public Result deleteUserById(@PathVariable int userId){
         int deleteUserById = userService.deleteUserById(userId);
         if (deleteUserById > 0){
-            return new Result().success();
+            return new Result().success(deleteUserById);
         }
         return new Result().fail("","删除用户失败");
     }

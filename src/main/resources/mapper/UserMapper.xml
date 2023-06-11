@@ -3,8 +3,8 @@
 <mapper namespace="com.tzh.user.mapper.UserMapper">
 
     <insert id="insertUser" parameterType="com.tzh.user.entity.User">
-        insert into user (nickname,account_id,phone,gender,remark,create_time,update_time)
-        VALUES(#{nickName},#{accountId},#{phone},#{gender},#{remark},#{createTime},#{updateTime})
+        insert into user (nickname,account_id,phone,gender,remark,create_time,update_time,password)
+        VALUES(#{nickName},#{accountId},#{phone},#{gender},#{remark},#{createTime},#{updateTime},#{password})
     </insert>
     <delete id="deleteUserById" parameterType="int">
         delete from user where id=#{userId}

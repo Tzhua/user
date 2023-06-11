@@ -3,6 +3,8 @@ package com.tzh.user.filter;
 import com.alibaba.fastjson.JSONObject;
 import com.tzh.user.JwtUtils;
 import com.tzh.user.entity.Result;
+import io.jsonwebtoken.Claims;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
@@ -19,6 +21,7 @@ import java.io.IOException;
  * @Description: 接口过滤器
  */
 @WebFilter(urlPatterns = "/*")
+@Component
 public class UrlFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
@@ -43,7 +46,8 @@ public class UrlFilter implements Filter {
         }
         //解析token是否存在
         try {
-            JwtUtils.parseJwt(token);
+            Claims claims = JwtUtils.parseJwt(token);
+            System.out.println(claims);
         }catch (Exception e){
             e.printStackTrace();
             Result noLogin = new Result().fail("未登录",400);
