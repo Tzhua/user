@@ -47,4 +47,11 @@ public interface UserMapper {
      * @return
      */
     int deleteUserById(int userId);
+
+    /**
+     * 根据账号密码校验用户登录
+     * @param user
+     * @return
+     */
+    int checkUser(User user);
 }

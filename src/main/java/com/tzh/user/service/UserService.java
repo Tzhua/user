@@ -33,4 +33,11 @@ public interface UserService {
      * @return
      */
     int deleteUserById(int userId);
+
+    /**
+     * 根据账号密码校验用户登录
+     * @param user
+     * @return
+     */
+    Boolean checkUser(User user);
 }

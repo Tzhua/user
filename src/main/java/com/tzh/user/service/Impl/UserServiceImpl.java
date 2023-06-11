@@ -61,4 +61,20 @@ public class UserServiceImpl implements UserService {
     public int deleteUserById(int userId) {
         return userMapper.deleteUserById(userId);
     }
+
+    /**
+     * 根据账号密码校验用户登录
+     *
+     * @param user
+     * @return
+     */
+    @Override
+    public Boolean checkUser(User user) {
+        boolean flag = false;
+        int checkUser = userMapper.checkUser(user);
+        if (checkUser > 0){
+            flag = true;
+        }
+        return flag;
+    }
 }
