@@ -37,7 +37,7 @@ public class LoginController {
          */
         Boolean checkUser = userService.checkUser(user);
         if (!checkUser){
-            return new Result().fail("请检查账号或密码输入是否有误","201");
+            return new Result().fail("请检查账号或密码输入是否有误",400);
         }
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
 

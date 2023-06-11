@@ -36,7 +36,7 @@ public class UrlFilter implements Filter {
         String token = httpServletRequest.getHeader("token");
         //判断token是否存在
         if (!StringUtils.hasLength(token)) {
-            Result error = new Result().fail(null,"未登录",201);
+            Result error = new Result().fail("未登录",400);
             String noLogin = JSONObject.toJSONString(error);
             httpServletResponse.getWriter().write(noLogin);
             return;
@@ -46,7 +46,7 @@ public class UrlFilter implements Filter {
             JwtUtils.parseJwt(token);
         }catch (Exception e){
             e.printStackTrace();
-            Result noLogin = new Result().fail(null,"未登录",201);
+            Result noLogin = new Result().fail("未登录",400);
             String s = JSONObject.toJSONString(noLogin);
             httpServletResponse.getWriter().write(s);
             return;

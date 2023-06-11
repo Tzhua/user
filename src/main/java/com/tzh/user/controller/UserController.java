@@ -28,7 +28,7 @@ public class UserController {
         if (i > 0){
             return new Result().success();
         }
-        return new Result().fail("创建用户失败","201");
+        return new Result().fail("","创建用户失败");
     }
 
     /**
@@ -42,7 +42,7 @@ public class UserController {
         if (user != null){
             return new Result().success(user);
         }
-        return new Result().fail("获取用户详情失败","201");
+        return new Result().fail("","获取用户详情失败");
 
     }
 
@@ -56,7 +56,7 @@ public class UserController {
         if (allUser != null && allUser.size() > 0){
             return new Result().success(allUser);
         }
-        return new Result().fail("获取用户列表失败","201");
+        return new Result().fail("","获取用户列表失败");
     }
 
     @PutMapping
@@ -65,7 +65,7 @@ public class UserController {
         if (updateUserInfoById > 0){
             return new Result().success(updateUserInfoById);
         }
-        return new Result().fail("更新用户信息失败","201");
+        return new Result().fail("","更新用户信息失败");
     }
 
     /**
@@ -79,7 +79,7 @@ public class UserController {
         if (deleteUserById > 0){
             return new Result().success();
         }
-        return new Result().fail("删除用户失败","201");
+        return new Result().fail("","删除用户失败");
     }
 
 
