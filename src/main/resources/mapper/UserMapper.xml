@@ -4,7 +4,7 @@
 
     <insert id="insertUser" parameterType="com.tzh.user.entity.User">
         insert into user (nickname,account_id,phone,gender,remark,create_time,update_time)
-        VALUES(#{nickName},#{accountId},#{phone},#{gender},#{remake},#{createTime},#{updateTime})
+        VALUES(#{nickName},#{accountId},#{phone},#{gender},#{remark},#{createTime},#{updateTime})
     </insert>
     <delete id="deleteUserById" parameterType="int">
         delete from user where id=#{userId}
@@ -25,7 +25,7 @@
     </select>
 
     <update id="updateUserInfoById" parameterType="com.tzh.user.entity.User">
-        UPDATE user SET nickname=#{nickName},phone=#{phone},gender=#{gender},remark=#{remake},update_time=#{updateTime}
+        UPDATE user SET nickname=#{nickName},phone=#{phone},gender=#{gender},remark=#{remark},password=#{password},update_time=#{updateTime}
         WHERE id=#{id};
     </update>
 </mapper>
