@@ -22,9 +22,11 @@ public class User {
 
     private int accountId;
     private String phone;
+    /**
+     * 性别，MALE=男性，FEMALE=女性
+     */
     private String gender;
     private String remake;
-    private int isDeleted;
     private Date createTime;
     private Date updateTime;
 }

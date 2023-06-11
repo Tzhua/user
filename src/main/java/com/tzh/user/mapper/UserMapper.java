@@ -3,6 +3,8 @@ package com.tzh.user.mapper;
 import com.tzh.user.entity.User;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  *
@@ -19,5 +21,30 @@ public interface UserMapper {
      */
     int insertUser(User user);
 
-    User selectUser(int id);
+    /**
+     * 根据用户id，获取用户详情
+     * @param id
+     * @return
+     */
+    User selectUserById(int id);
+
+    /**
+     * 获取用户列表
+     * @return
+     */
+    List<User> getAllUser();
+
+    /**
+     * 根据用户id，修改信息
+     * @param user
+     * @return
+     */
+    int updateUserInfoById(User user);
+
+    /**
+     * 根据用户ID，删除用户
+     * @param userId    用户id
+     * @return
+     */
+    int deleteUserById(int userId);
 }
