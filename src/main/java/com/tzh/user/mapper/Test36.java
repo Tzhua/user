@@ -14,10 +14,10 @@ import java.util.Map;
  */
 public class Test36 {
     public static void main(String[] args) {
-        check36(72);
+        check36(72,1000d,1000d,1000d);
     }
 
-    public static void check36(Integer sumMonth){
+    public static void check36(Integer sumMonth,Double oneYearMoney,Double twoYearMoney,Double thirdYearMoney){
         Integer year1 = 12;
         Integer year2 = 24;
         Integer year3 = 36;
@@ -26,44 +26,79 @@ public class Test36 {
         Double rate2=1.022;
         Double rate3=1.0226;
 
-        Double monthMoney=1000d;
-        //总投入，5年
-        double monthMoneySum= 3000d * sumMonth;
-        //总收入
-        Double moneyYearSum = 0d;
-        //第一期
-        Map<Integer, Double> moneyYearSum1 = getMoneyYearSum(year1, monthMoney, rate1);
-
-        Map<Integer, Double> moneyYearSum2 = getMoneyYearSum(year2, monthMoney, rate2);
-        Map<Integer, Double> moneyYearSum3 = getMoneyYearSum(year3, monthMoney, rate3);
         int oneEnd = sumMonth / 12;
         int twoEnd = sumMonth / 24;
         int thirdEnd = sumMonth / 36;
+
+        //总投入，5年
+        double monthMoneySum= (oneYearMoney+twoYearMoney+thirdYearMoney) * sumMonth;
+        //12期投入总和
+        double oneYearMoneySum = oneYearMoney * sumMonth;
+
+        double twoYearMoneySum = twoYearMoney * sumMonth;
+
+        double thirdYearMoneySum = thirdYearMoney * sumMonth;
+        //总收入
+        Double moneyYearSum = 0d;
+        //第一期
+        Map<Integer, Double> moneyYearSum1 = getMoneyYearSum(year1, oneYearMoney, rate1);
+
+        Map<Integer, Double> moneyYearSum2 = getMoneyYearSum(year2, twoYearMoney, rate2);
+        Map<Integer, Double> moneyYearSum3 = getMoneyYearSum(year3, thirdYearMoney, rate3);
+
         //一年利息的,按6年算
         List<Map<Integer, Double>> oneYear = showMoney(oneEnd,year1, rate1, moneyYearSum1);
-        //两年利息的,按6年算
+        Double oneMoneySum = everyOne(oneYear);
+        System.out.println("12期总投入"+oneYearMoneySum);
+        System.out.println("12期，"+oneEnd+"年连本带利共计"+oneMoneySum);
+        double oneSum = oneMoneySum-oneYearMoneySum;
+        System.out.println("12期，"+oneEnd+"年获得的利息共计"+oneSum);
+
         List<Map<Integer, Double>> twoYear = showMoney(twoEnd,year2, rate2, moneyYearSum2);
-        //两年利息的,按6年算
+        Double twoMoneySum = everyOne(twoYear);
+        System.out.println("24期总投入"+twoMoneySum);
+        System.out.println("24期，"+oneEnd+"年连本带利共计"+twoMoneySum);
+        double twoSum = twoMoneySum-twoYearMoneySum;
+        System.out.println("24期，"+oneEnd+"年获得的利息共计"+twoSum);
+
         List<Map<Integer, Double>> thirdYear = showMoney(thirdEnd,year3, rate3, moneyYearSum3);
+        Double thirdMoneySum = everyOne(thirdYear);
+        System.out.println("36期总投入"+thirdMoneySum);
+        System.out.println("36期，"+oneEnd+"年连本带利共计"+thirdMoneySum);
+        double thirdSum = thirdMoneySum-thirdYearMoneySum;
+        System.out.println("36期，"+oneEnd+"年获得的利息共计"+thirdSum);
+
         List<Map<Integer,Double>> allList = new ArrayList<>();
         allList.addAll(oneYear);
+
         allList.addAll(twoYear);
         allList.addAll(thirdYear);
-        System.out.println(allList);
+        // System.out.println(allList);
+        //总和
+        Double sumMoney = everyOne(allList);
+        System.out.println(oneEnd+"年总投入"+monthMoneySum);
+        System.out.println(oneEnd+"年连本带利共计"+sumMoney);
+        double allSum = sumMoney-monthMoneySum;
+        System.out.println(oneEnd+"年获得的利息共计"+allSum);
 
-        for (int i = 0; i < allList.size(); i++) {
-            Map<Integer, Double> map = allList.get(i);
+    }
+    //每种存法各获利多少
+
+    /**
+     * 每种存单每月的本金+利息
+     * @param list  存单列表
+     * @return      此种存单最终得到的本金和
+     */
+    public static Double everyOne(List<Map<Integer,Double>> list){
+        Double moneyYearSum = 0d;
+        for (int i = 0; i < list.size(); i++) {
+            Map<Integer, Double> map = list.get(i);
             for (Integer key: map.keySet()){
                 Double aDouble = map.get(key);
-                System.out.println(aDouble);
                 moneyYearSum = moneyYearSum + aDouble;
             }
         }
-        System.out.println("总投入"+monthMoneySum);
-        System.out.println("5年连本带利共计"+moneyYearSum);
-        double sum = moneyYearSum-monthMoneySum;
-        System.out.println("5年获得的利息共计"+sum);
-
+        return moneyYearSum;
     }
     private static List<Map<Integer,Double>> showMoney(Integer end,Integer year2, Double rate2, Map<Integer, Double> moneyYearSum2) {
         List<Map<Integer,Double>> twoYearList = new ArrayList<>();
@@ -83,7 +118,7 @@ public class Test36 {
             }
             twoYearList.add(moneyYearSumMap);
         }
-        System.out.println(twoYearList);
+        // System.out.println(twoYearList);
         return twoYearList;
     }
 

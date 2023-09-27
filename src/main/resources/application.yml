@@ -1,0 +1,27 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://101.33.242.64:3306/customer-system?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: tzh
+    password: Tzh980311+
+  application:
+    name: user
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 101.33.242.64:8848
+      username: nacos
+      password: Tzh980311
+#mybatis配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.thz.user.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    #开启为空时，返回空列并非null
+    return-instance-for-empty-row: true
+
+
